@@ -1,0 +1,23 @@
+class Solution:
+    def maximumProfit(self, profit: List[int], weight: List[int], capacity: int) -> int:
+        
+        prev = [(profit[0] if weight[0] <= cap else 0) for cap in range(capacity + 1)]
+        print(prev)
+        
+        for last_item in range(1, len(weight)):
+            curr = [0 for _ in range(capacity + 1)]
+            
+            for cap in range(capacity + 1):
+                #max profit without current item for using items up to current item
+                exclude = prev[cap]
+                #if can't include current item based on current capcity then include X possible
+                include = 0
+                #if can include:
+                if weight[last_item] <= cap:
+                    #max profit at c = profit for pi + max profit at c - wi
+                    include = profit[last_item] + prev[cap - weight[last_item]]
+                curr[cap] = max(include, exclude)
+            
+            prev = curr
+        
+        return prev[capacity]
